@@ -298,7 +298,7 @@ st.markdown("""
 4. If it still doesn't work, send me an email with the student's details and move on to the next submission.
 5. Verify that the name on the submission matches the name of the file.
 6. Transfer the answers on the submission to the spaces provided.
-7. **DON't** use commas for decimal marks. Please use a full-stop.
+7. **DON'T** use commas for decimal marks. Please use a full stop.
 8. If they didn't add the cardinal direction, select the "NA" option from the drop-down menu.
 9. When you are done, press the grade button.
 10. Download the graded submission and store it in a separate folder. **DON'T** change the filename.
