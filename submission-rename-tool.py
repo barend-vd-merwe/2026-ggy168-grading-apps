@@ -10,7 +10,7 @@ import base64
 
 # custom functions
 # ------------------------------------------------------------
-def prac_viewer(img, height=700, max_zoom_ratio=4.0, key="osd_viewer"):
+def submission_viewer(img, height=700, max_zoom_ratio=4.0, key="osd_viewer"):
     if isinstance(img, Image.Image):
         pil_img = img
     else:
@@ -89,7 +89,7 @@ if image and gc is not None:
     img_bytes = np.asarray(bytearray(image.read()), dtype=np.uint8)
     img = cv.imdecode(img_bytes, 1)
     snumber = st.text_input("Student Number")
-    prac_viewer(img=image)
+    submission_viewer(img=image)
     if st.button("Load Details"):
         df = pd.read_csv(gc, encoding = "latin1")
         surname, name = df.loc[df["emplid"] == snumber, ["surname", "name"]].iloc[0]
