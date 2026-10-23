@@ -90,20 +90,27 @@ def prac_viewer(img_url, height=700, max_zoom_ratio=4.0, key="osd_viewer"):
     """
     st.iframe(html_osd, height=height)
 
+def safe_float(val):
+    try:
+        val_str = str(val).strip()
+        return float(val_str) if val_str else None
+    except:
+        return None
+        
 def grade_submission():
     q1_memo = pd.read_csv("practical-assignment-3-question-1-memo.csv")
     
     q1_ans = {
         "q" : ["a","b","c"],
-        "tfb_val" : [float(st.session_state["q1a_tfb_val"]),
-                     float(st.session_state["q1b_tfb_val"]),
-                     float(st.session_state["q1c_tfb_val"])],
+        "tfb_val" : [safe_float(st.session_state["q1a_tfb_val"]),
+                     safe_float(st.session_state["q1b_tfb_val"]),
+                     safe_float(st.session_state["q1c_tfb_val"])],
         "tfb_unt" : [st.session_state["q1a_tfb_unt"],
                      st.session_state["q1b_tfb_unt"],
                      st.session_state["q1c_tfb_unt"]],
-        "tbb_val" : [float(st.session_state["q1a_tbb_val"]),
-                     float(st.session_state["q1b_tbb_val"]),
-                     float(st.session_state["q1c_tbb_val"])],
+        "tbb_val" : [safe_float(st.session_state["q1a_tbb_val"]),
+                     safe_float(st.session_state["q1b_tbb_val"]),
+                     safe_float(st.session_state["q1c_tbb_val"])],
         "tbb_unt" : [st.session_state["q1a_tbb_unt"],
                      st.session_state["q1b_tbb_unt"],
                      st.session_state["q1c_tbb_unt"]],
@@ -142,9 +149,9 @@ def grade_submission():
     q2_memo = pd.read_csv("practical-assignment-3-question-2-memo.csv")
     q2_ans = {
         "q" : ["a","b","c"],
-        "sub_ans" : [float(st.session_state["q2a_val"]),
-                     float(st.session_state["q2b_val"]),
-                     float(st.session_state["q2c_val"])],
+        "sub_ans" : [safe_float(st.session_state["q2a_val"]),
+                     safe_float(st.session_state["q2b_val"]),
+                     safe_float(st.session_state["q2c_val"])],
         "sub_unt" : [st.session_state["q2a_unt"],
                      st.session_state["q2b_unt"],
                      st.session_state["q2c_unt"]],
@@ -176,15 +183,15 @@ def grade_submission():
     q3_memo = pd.read_csv("practical-assignment-3-question-3-memo.csv")
     q3_ans = {
         "q" : ["a","b","c"],
-        "tfb_val" : [float(st.session_state["q3a_tfb_val"]),
-                     float(st.session_state["q3b_tfb_val"]),
-                     float(st.session_state["q3c_tfb_val"])],
+        "tfb_val" : [safe_float(st.session_state["q3a_tfb_val"]),
+                     safe_float(st.session_state["q3b_tfb_val"]),
+                     safe_float(st.session_state["q3c_tfb_val"])],
         "tfb_unt" : [st.session_state["q3a_tfb_unt"],
                      st.session_state["q3b_tfb_unt"],
                      st.session_state["q3c_tfb_unt"]],
-        "tbb_val" : [float(st.session_state["q3a_tbb_val"]),
-                     float(st.session_state["q3b_tbb_val"]),
-                     float(st.session_state["q3c_tbb_val"])],
+        "tbb_val" : [safe_float(st.session_state["q3a_tbb_val"]),
+                     safe_float(st.session_state["q3b_tbb_val"]),
+                     safe_float(st.session_state["q3c_tbb_val"])],
         "tbb_unt" : [st.session_state["q3a_tbb_unt"],
                      st.session_state["q3b_tbb_unt"],
                      st.session_state["q3c_tbb_unt"]],
@@ -223,15 +230,15 @@ def grade_submission():
     q4_memo = pd.read_csv("practical-assignment-3-question-4-memo.csv")
     q4_ans = {
         "q" : ["a","b","c"],
-        "mfb_val" : [float(st.session_state["q4a_mfb_val"]),
-                     float(st.session_state["q4b_mfb_val"]),
-                     float(st.session_state["q4c_mfb_val"])],
+        "mfb_val" : [safe_float(st.session_state["q4a_mfb_val"]),
+                     safe_float(st.session_state["q4b_mfb_val"]),
+                     safe_float(st.session_state["q4c_mfb_val"])],
         "mfb_unt" : [st.session_state["q4a_mfb_unt"],
                      st.session_state["q4b_mfb_unt"],
                      st.session_state["q4c_mfb_unt"]],
-        "mbb_val" : [float(st.session_state["q4a_mbb_val"]),
-                     float(st.session_state["q4b_mbb_val"]),
-                     float(st.session_state["q4c_mbb_val"])],
+        "mbb_val" : [safe_float(st.session_state["q4a_mbb_val"]),
+                     safe_float(st.session_state["q4b_mbb_val"]),
+                     safe_float(st.session_state["q4c_mbb_val"])],
         "mbb_unt" : [st.session_state["q4a_mbb_unt"],
                      st.session_state["q4b_mbb_unt"],
                      st.session_state["q4c_mbb_unt"]],
@@ -275,9 +282,16 @@ def grade_submission():
 def dms_to_dd():
     raw = st.session_state["conv_dms"].strip()
     parts = raw.split("/")
-    deg, minutes, sec = [float(p) for p in parts]
-    dd = round(deg + (minutes / 60.0) + (sec / 3600.0), 4)
-    st.session_state["conv_ans"] = f"{dd}"
+    nums = [float(p) for p in parts]
+    if len(nums) != 3:
+        st.error("Incorrect DMS entry. Entry must be dd/mm/ss (if there are no seconds, just enter 00).")
+    else:
+        try:
+            deg, minutes, sec = [float(p) for p in parts]
+            dd = round(deg + (minutes / 60.0) + (sec / 3600.0), 4)
+            st.session_state["conv_ans"] = f"{dd}"
+        except:
+            st.error("Incorrect data entered.")
 
 
 def next_submission():
