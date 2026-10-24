@@ -259,18 +259,18 @@ with title_col2:
 with st.expander("Instructions", expanded = False):
     st.markdown(textwrap.dedent("""
     1. Enter your name in the provided field.
-    2. Load the student submission. It is now possible to load multiple submissions at the same time which should make the grading faster.
+    2. Load the student submission. It is now possible to load multiple submissions at the same time, which should speed up grading.
     3. If there is an error during loading, refresh your browser window and try again.
     4. If it still doesn't work, send me an email with the student's details and move on to the next submission.
     5. Verify that the name on the submission matches the name of the file.
     6. Transfer the answers on the submission to the spaces provided.
-    7. For question 2 in the "Work" column asign values based on the following:
-        - "Full Credit": The **majority** of the line intersection marks occur within the red circles.
-        - "Partial Credit": Line intersection marks are present but are mostly not in the red circles.
-        - "No Credit": No line intersection marks are present.
+    7. For question 2 in the "Work" column, assign values based on the following:
+        - "Full Credit": Three or more of the line intersection marks occur within the red circles.
+        - "Partial Credit": At most two of the line intersection marks occur within the red circles.
+        - "No Credit": No line intersection marks are present, OR the line intersection marks are present, but they do not occur within **any** of the red circles.
     8. When you are done, press the grade button.
     9. Download the graded submission and store it in a separate folder. **DON'T** change the filename.
-    10. If you uploaded multiplee submissions, press the next buttun.
+    10. If you uploaded multiple submissions, press the next button.
     """))
 
 if "script_index" not in st.session_state:
