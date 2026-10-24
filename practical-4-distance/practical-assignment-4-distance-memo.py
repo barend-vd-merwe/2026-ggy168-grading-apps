@@ -14,6 +14,8 @@ import textwrap
 import yaml
 from pathlib import Path
 
+script_dir = Path(__file__).resolve().parent
+
 # custom functions
 # ------------------------------------------------------------
 def prac_viewer(img_url, height=700, max_zoom_ratio=4.0, key="osd_viewer"):
@@ -82,7 +84,7 @@ def prac_viewer(img_url, height=700, max_zoom_ratio=4.0, key="osd_viewer"):
     st.iframe(html_osd, height=height)
 
 def grade_submission():
-    with open("practical-4-distance-memo.yaml", "r", encoding="utf-8") as file:
+    with open(script_dir / "practical-4-distance-memo.yaml", "r", encoding="utf-8") as file:
         memo = yaml.safe_load(file)
 
     q1 = {
@@ -356,7 +358,7 @@ if uploaded_files and grader.strip():
 
         # Set target coordinates
 
-        ac = pd.read_csv("practical-4-aruco-markers.csv")
+        ac = pd.read_csv(script_dir / "practical-4-aruco-markers.csv")
 
         target_coords = np.float32([[ac.iloc[0,3], ac.iloc[0,4]],
                                     [ac.iloc[1,3], ac.iloc[1,4]],
@@ -377,8 +379,8 @@ if uploaded_files and grader.strip():
         shift = 8
         factor = 1 << shift
         bubble_radius = int(round(24 * factor))
-        ov = pd.read_csv("oak_to_val.csv")
-        iu = pd.read_csv("iro_to_upt.csv")
+        ov = pd.read_csv(script_dir / "oak_to_val.csv")
+        iu = pd.read_csv(script_dir / "iro_to_upt.csv")
 
         for i in range(len(ov)):
             rawx = ov.iloc[i]["cvx"]
