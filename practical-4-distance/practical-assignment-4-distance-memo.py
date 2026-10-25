@@ -266,7 +266,7 @@ with st.expander("Instructions", expanded = False):
     6. Transfer the answers on the submission to the spaces provided.
     7. For question 2 in the "Work" column, assign values based on the following:
         - "Full Credit": Three or more of the line intersection marks occur within the red circles.
-        - "Partial Credit": At most two of the line intersection marks occur within the red circles.
+        - "Partial Credit": Line intersection marks are present, but fewer than three fall into the red circles.
         - "No Credit": No line intersection marks are present, OR the line intersection marks are present, but they do not occur within **any** of the red circles.
     8. When you are done, press the grade button.
     9. Download the graded submission and store it in a separate folder. **DON'T** change the filename.
