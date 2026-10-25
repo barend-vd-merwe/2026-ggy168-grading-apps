@@ -330,50 +330,53 @@ if uploaded_files and grader.strip():
         aruco_0_index = ids.index(0)
         aruco_0_corners = corners[aruco_0_index]
         aruco_0_corners_rshp = aruco_0_corners.reshape((4,2))
-        topleft_x = np.mean(aruco_0_corners_rshp[:,0])
-        topleft_y = np.mean(aruco_0_corners_rshp[:,1])
-
+        
         aruco_1_index = ids.index(1)
         aruco_1_corners = corners[aruco_1_index]
         aruco_1_corners_rshp = aruco_1_corners.reshape((4,2))
-        topright_x = np.mean(aruco_1_corners_rshp[:,0])
-        topright_y = np.mean(aruco_1_corners_rshp[:,1])
 
         aruco_2_index = ids.index(2)
         aruco_2_corners = corners[aruco_2_index]
         aruco_2_corners_rshp = aruco_2_corners.reshape((4,2))
-        bottomleft_x = np.mean(aruco_2_corners_rshp[:,0])
-        bottomleft_y = np.mean(aruco_2_corners_rshp[:,1])
 
         aruco_3_index = ids.index(3)
         aruco_3_corners = corners[aruco_3_index]
         aruco_3_corners_rshp = aruco_3_corners.reshape((4,2))
-        bottomright_x = np.mean(aruco_3_corners_rshp[:,0])
-        bottomright_y = np.mean(aruco_3_corners_rshp[:,1])
 
-        current_coords = np.float32([[topleft_x, topleft_y],
-                                     [topright_x, topright_y],
-                                     [bottomright_x, bottomright_y],
-                                     [bottomleft_x, bottomleft_y]])
+        aruco_markers = [aruco_0_corners_rshp,
+                         aruco_1_corners_rshp,
+                         aruco_2_corners_rshp,
+                         aruco_3_corners_rshp]
 
+        current_coords_list = []
+        for marker in aruco_markers:
+            for i in range(4):
+                x_coord = marker[i,0]
+                y_coord = marker[i,1]
+                current_coords_list.append([x_coord, y_coord])
+        current_coords = np.array(current_coords_list, dtype=np.float32)
+                
         # Set target coordinates
 
-        ac = pd.read_csv(script_dir / "practical-4-aruco-markers.csv")
+        ac = pd.read_csv(script_dir / "aruco.csv")
 
-        target_coords = np.float32([[ac.iloc[0,3], ac.iloc[0,4]],
-                                    [ac.iloc[1,3], ac.iloc[1,4]],
-                                    [ac.iloc[3,3], ac.iloc[3,4]],
-                                    [ac.iloc[2,3], ac.iloc[2,4]]])
+        target_coords_list = []
+
+        for i in range(len(ac)):
+            x_coord = ac.iloc[i,4]
+            y_coord = ac.iloc[i,5]
+            target_coords_list.append([x_coord, y_coord])
+            
+        target_coords = np.array(target_coords_list, dtype=np.float32)
 
         # transform the image
-        H, mask = cv.findHomography(current_coords, target_coords, cv.RANSAC, 5.0)
-        affine_matrix, _ = cv.estimateAffine2D(current_coords, target_coords)
-        warped_img = cv.warpAffine(cv_img,
-                                   affine_matrix,
-                                   (2480, 3508),
-                                   flags=cv.INTER_LINEAR,
-                                   borderMode=cv.BORDER_CONSTANT,
-                                   borderValue=(255, 255, 255))
+        homography_matrix, mask = cv.findHomography(current_coords, target_coords, cv.RANSAC, 5.0)
+        warped_img = cv.warpPerspective(cv_img,
+                                        homography_matrix,
+                                        (2480, 3508),
+                                        flags=cv.INTER_LINEAR,
+                                        borderMode=cv.BORDER_CONSTANT,
+                                        borderValue=(255, 255, 255))
 
         # load intersections files
         shift = 8
